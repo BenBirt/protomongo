@@ -1,12 +1,15 @@
-package protomongo
+package protomongo_test
 
 import (
 	"reflect"
 	"testing"
 
-	pb "github.com/dataform-co/dataform/protomongo/example"
+	"github.com/BenBirt/protomongo"
+	pb "github.com/BenBirt/protomongo/example"
+	mongodb "github.com/BenBirt/protomongo/testing"
 	"github.com/golang/protobuf/proto"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 var (
@@ -146,7 +149,7 @@ var (
 
 func TestMarshalUnmarshal(t *testing.T) {
 	rb := bson.NewRegistryBuilder()
-	rb.RegisterCodec(reflect.TypeOf((*proto.Message)(nil)).Elem(), NewProtobufCodec())
+	rb.RegisterCodec(reflect.TypeOf((*proto.Message)(nil)).Elem(), protomongo.NewProtobufCodec())
 	reg := rb.Build()
 
 	for _, testCase := range tests {
@@ -169,7 +172,7 @@ func TestMarshalUnmarshal(t *testing.T) {
 
 func TestMarshalUnmarshalWithPointers(t *testing.T) {
 	rb := bson.NewRegistryBuilder()
-	rb.RegisterCodec(reflect.TypeOf((*proto.Message)(nil)).Elem(), NewProtobufCodec())
+	rb.RegisterCodec(reflect.TypeOf((*proto.Message)(nil)).Elem(), protomongo.NewProtobufCodec())
 	reg := rb.Build()
 
 	for _, testCase := range tests {
@@ -188,4 +191,23 @@ func TestMarshalUnmarshalWithPointers(t *testing.T) {
 			}
 		}
 	}
+}
+
+func TestWithDatabase(t *testing.T) {
+	_, stopMongo := startServer(t)
+	defer stopMongo()
+}
+
+func startServer(t *testing.T) (*mongo.Database, func()) {
+	mongod := &mongodb.Mongod{}
+	if err := mongod.Start(); err != nil {
+		t.Fatal(err)
+	}
+
+	m, err := mongod.GetClient()
+	if err != nil {
+		t.Fatal(err)
+	}
+	d := m.Database("test_db")
+	return d, func() { mongod.Stop() }
 }

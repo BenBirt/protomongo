@@ -2,7 +2,7 @@ syntax="proto3";
 
 package protomongo.example;
 
-option go_package = "github.com/dataform-co/dataform/protomongo/example";
+option go_package = "github.com/BenBirt/protomongo/example";
 
 enum Enum {
   VAL_0 = 0;

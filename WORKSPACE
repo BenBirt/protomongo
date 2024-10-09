@@ -203,3 +203,9 @@ go_rules_dependencies()
 go_register_toolchains()
 
 gazelle_dependencies()
+
+# Fetch MongoDB binaries.
+
+load("//:mongodb/repository_rules.bzl", "mongodb")
+
+mongodb(name = "mongodb")

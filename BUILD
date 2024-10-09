@@ -12,8 +12,10 @@ go_test(
     embed = [":go_default_library"],
     deps = [
         ":example_go_proto",
+        "//testing:go_default_library",
         "@com_github_golang_protobuf//proto:go_default_library",
         "@org_mongodb_go_mongo_driver//bson:go_default_library",
+        "@org_mongodb_go_mongo_driver//mongo:go_default_library",
     ],
 )
 
@@ -40,7 +42,7 @@ proto_library(
 go_proto_library(
     name = "example_go_proto",
     testonly = 1,
-    importpath = "github.com/dataform-co/dataform/protomongo/example",
+    importpath = "github.com/BenBirt/protomongo/example",
     proto = ":example_proto",
     visibility = ["//visibility:public"],
 )
