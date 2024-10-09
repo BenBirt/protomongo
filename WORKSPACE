@@ -133,6 +133,69 @@ go_repository(
     version = "v1.2.0",
 )
 
+go_repository(
+    name = "com_github_phayes_freeport",
+    importpath = "github.com/phayes/freeport",
+    sum = "h1:JhzVVoYvbOACxoUmOs6V/G4D5nPVUW73rKvXxP4XUJc=",
+    version = "v0.0.0-20180830031419-95f893ade6f2",
+)
+
+go_repository(
+    name = "com_github_google_uuid",
+    importpath = "github.com/google/uuid",
+    sum = "h1:Gkbcsh/GbpXz7lPftLA3P6TYMwjCLYm83jiFQZF/3gY=",
+    version = "v1.1.1",
+)
+
+go_repository(
+    name = "com_github_golang_snappy",
+    importpath = "github.com/golang/snappy",
+    sum = "h1:Qgr9rKW7uDUkrbSmQeiDsGa8SjGyCOGtuasMWwvp2P4=",
+    version = "v0.0.1",
+)
+
+go_repository(
+    name = "com_github_datadog_zstd",
+    importpath = "github.com/DataDog/zstd",
+    sum = "h1:+IawcoXhCBylN7ccwdwf8LOH2jKq7NavGpEPanrlTzE=",
+    version = "v1.4.4",
+)
+
+go_repository(
+    name = "com_github_xdg_scram",
+    importpath = "github.com/xdg/scram",
+    sum = "h1:u40Z8hqBAAQyv+vATcGgV0YCnDjqSL7/q/JyPhhJSPk=",
+    version = "v0.0.0-20180814205039-7eeb5667e42c",
+)
+
+go_repository(
+    name = "com_github_xdg_stringprep",
+    importpath = "github.com/xdg/stringprep",
+    sum = "h1:d9X0esnoa3dFsV0FG35rAT0RIhYFlPq7MiP+DW89La0=",
+    version = "v1.0.0",
+)
+
+go_repository(
+    name = "org_golang_x_crypto",
+    importpath = "golang.org/x/crypto",
+    sum = "h1:sKJQZMuxjOAR/Uo2LBfU90onWEf1dF4C+0hPJCc9Mpc=",
+    version = "v0.0.0-20191227163750-53104e6ec876",
+)
+
+go_repository(
+    name = "org_golang_x_sync",
+    importpath = "golang.org/x/sync",
+    sum = "h1:vcxGaoTs7kV8m5Np9uUNQin4BrLOthgV7252N8V+FwY=",
+    version = "v0.0.0-20190911185100-cd5d95a43a6e",
+)
+
+go_repository(
+    name = "com_github_pkg_errors",
+    importpath = "github.com/pkg/errors",
+    sum = "h1:iURUrRGxPUNPdy5/HRSm+Yj6okJ6UtLINN0Q9M4+h3I=",
+    version = "v0.8.1",
+)
+
 ############################################################
 
 go_rules_dependencies()
