@@ -4,7 +4,7 @@ go_library(
     name = "go_default_library",
     srcs = ["mongodb.go"],
     data = ["@mongodb//:bin/mongod"],
-    importpath = "github.com/BenBirt/protomongo/testing",
+    importpath = "github.com/BenBirt/protomongo/mongodb/testing",
     visibility = ["//visibility:public"],
     deps = [
         "//:go_default_library",

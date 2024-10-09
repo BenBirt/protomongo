@@ -6,7 +6,7 @@ import (
 
 	"github.com/BenBirt/protomongo"
 	pb "github.com/BenBirt/protomongo/example"
-	mongodb "github.com/BenBirt/protomongo/testing"
+	mongodb "github.com/BenBirt/protomongo/mongodb/testing"
 	"github.com/golang/protobuf/proto"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"

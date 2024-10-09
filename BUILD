@@ -9,10 +9,10 @@ gazelle(name = "gazelle")
 go_test(
     name = "go_default_test",
     srcs = ["protomongo_test.go"],
-    embed = [":go_default_library"],
     deps = [
         ":example_go_proto",
-        "//testing:go_default_library",
+        ":go_default_library",
+        "//mongodb/testing:go_default_library",
         "@com_github_golang_protobuf//proto:go_default_library",
         "@org_mongodb_go_mongo_driver//bson:go_default_library",
         "@org_mongodb_go_mongo_driver//mongo:go_default_library",
