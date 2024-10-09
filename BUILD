@@ -1,6 +1,10 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+# gazelle:prefix github.com/BenBirt/protomongo
+gazelle(name = "gazelle")
 
 go_test(
     name = "go_default_test",
@@ -16,7 +20,7 @@ go_test(
 go_library(
     name = "go_default_library",
     srcs = ["protomongo.go"],
-    importpath = "github.com/dataform-co/dataform/protomongo",
+    importpath = "github.com/BenBirt/protomongo",
     visibility = ["//visibility:public"],
     deps = [
         "@com_github_golang_protobuf//descriptor:go_default_library_gen",
