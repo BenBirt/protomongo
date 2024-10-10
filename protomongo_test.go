@@ -154,21 +154,21 @@ func TestAgainstRealDatabase(t *testing.T) {
 	defer stopMongo()
 	coll := db.Collection("test_collection")
 	if _, err := coll.InsertOne(context.Background(), simpleMessage); err != nil {
-		t.Errorf("coll.InsertOne error = %v", err)
+		t.Errorf("coll.InsertOne(%v) error = %v, want nil", simpleMessage, err)
 	}
 	count, err := coll.CountDocuments(context.Background(), bson.D{})
 	if err != nil {
-		t.Errorf("coll.CountDocuments error = %v", err)
+		t.Errorf("coll.CountDocuments() error = %v, want nil", err)
 	}
 	if count != 1 {
-		t.Errorf("coll.CountDocuments got = %v; want = 1", count)
+		t.Errorf("coll.CountDocuments() = %v; want 1", count)
 	}
 	var found *pb.SimpleMessage
 	if err := coll.FindOne(context.Background(), bson.D{}).Decode(&found); err != nil {
-		t.Errorf("Decode() = %v, want nil")
+		t.Errorf("coll.FindOne().Decode() error = %v, want nil", err)
 	}
 	if !proto.Equal(simpleMessage, found) {
-		t.Errorf("proto.Equal(%v, %v) = false, want true")
+		t.Errorf("proto.Equal(%v, %v) = false, want true", simpleMessage, found)
 	}
 }
 
@@ -180,16 +180,16 @@ func TestMarshalUnmarshal(t *testing.T) {
 	for _, testCase := range tests {
 		b, err := bson.MarshalWithRegistry(reg, testCase.pb)
 		if err != nil {
-			t.Errorf("bson.MarshalWithRegistry error = %v", err)
+			t.Errorf("bson.MarshalWithRegistry(%v) error = %v, want nil", testCase.pb, err)
 		}
 
 		for _, equivalentPb := range append(testCase.equivalentPbs, testCase.pb) {
 			out := reflect.New(reflect.TypeOf(equivalentPb).Elem()).Interface().(proto.Message)
 			if err = bson.UnmarshalWithRegistry(reg, b, &out); err != nil {
-				t.Errorf("bson.UnmarshalWithRegistry error = %v", err)
+				t.Errorf("bson.UnmarshalWithRegistry(%v) error = %v, want nil", b, err)
 			}
 			if !proto.Equal(equivalentPb, out) {
-				t.Errorf("failed: in=%#q, out=%#q", equivalentPb, out)
+				t.Errorf("proto.Equal(%v, %v) = false, want true", equivalentPb, out)
 			}
 		}
 	}
@@ -203,16 +203,16 @@ func TestMarshalUnmarshalWithPointers(t *testing.T) {
 	for _, testCase := range tests {
 		b, err := bson.MarshalWithRegistry(reg, testCase.pb)
 		if err != nil {
-			t.Errorf("bson.MarshalWithRegistry error = %v", err)
+			t.Errorf("bson.MarshalWithRegistry(%v) error = %v, want nil", testCase.pb, err)
 		}
 
 		for _, equivalentPb := range append(testCase.equivalentPbs, testCase.pb) {
 			out := reflect.New(reflect.TypeOf(equivalentPb).Elem()).Interface().(proto.Message)
 			if err = bson.UnmarshalWithRegistry(reg, b, &out); err != nil {
-				t.Errorf("bson.UnmarshalWithRegistry error = %v", err)
+				t.Errorf("bson.UnmarshalWithRegistry(%v) error = %v, want nil", b, err)
 			}
 			if !proto.Equal(equivalentPb, out) {
-				t.Errorf("failed: in=%#q, out=%#q", equivalentPb, out)
+				t.Errorf("proto.Equal(%v, %v) = false, want true", equivalentPb, out)
 			}
 		}
 	}
