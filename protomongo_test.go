@@ -172,6 +172,8 @@ func TestAgainstRealDatabase(t *testing.T) {
 	}
 }
 
+// TODO: Add a testcase looking up protos by fields/nested fields.
+
 func TestMarshalUnmarshal(t *testing.T) {
 	rb := bson.NewRegistryBuilder()
 	rb.RegisterCodec(reflect.TypeOf((*proto.Message)(nil)).Elem(), protomongo.NewProtobufCodec())
