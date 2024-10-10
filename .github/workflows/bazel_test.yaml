@@ -1,7 +1,10 @@
 name: Run tests
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
-    runs-on: gcr.io/bazel-public/bazel:7.3.2
+  run-bazel-test:
+    runs-on: ubuntu-latest
     steps:
-      - run: test ...
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+    # runs-on: gcr.io/bazel-public/bazel:7.3.2
+    # steps:
+    #   - run: test ...
