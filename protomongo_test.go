@@ -1,6 +1,7 @@
 package protomongo_test
 
 import (
+	"context"
 	"reflect"
 	"testing"
 
@@ -13,6 +14,15 @@ import (
 )
 
 var (
+	simpleMessage = &pb.SimpleMessage{
+		StringField: "foo",
+		Int32Field:  32525,
+		Int64Field:  1531541553141312315,
+		FloatField:  21541.3242,
+		DoubleField: 21535215136361617136.543858,
+		BoolField:   true,
+		EnumField:   pb.Enum_VAL_2,
+	}
 	tests = []struct {
 		name          string
 		pb            proto.Message
@@ -20,15 +30,7 @@ var (
 	}{
 		{
 			name: "simple message",
-			pb: &pb.SimpleMessage{
-				StringField: "foo",
-				Int32Field:  32525,
-				Int64Field:  1531541553141312315,
-				FloatField:  21541.3242,
-				DoubleField: 21535215136361617136.543858,
-				BoolField:   true,
-				EnumField:   pb.Enum_VAL_2,
-			},
+			pb:   simpleMessage,
 			equivalentPbs: []proto.Message{
 				&pb.RepeatedFieldMessage{
 					StringField: []string{"foo"},
@@ -82,7 +84,7 @@ var (
 				&pb.MessageWithRepeatedSubMessage{
 					StringField: "baz",
 					SimpleMessage: []*pb.SimpleMessage{
-						&pb.SimpleMessage{
+						{
 							StringField: "foo",
 							Int32Field:  32525,
 							Int64Field:  1531541553141312315,
@@ -100,7 +102,7 @@ var (
 			pb: &pb.MessageWithRepeatedSubMessage{
 				StringField: "baz",
 				SimpleMessage: []*pb.SimpleMessage{
-					&pb.SimpleMessage{
+					{
 						StringField: "foo",
 						Int32Field:  32525,
 						Int64Field:  1531541553141312315,
@@ -109,7 +111,7 @@ var (
 						BoolField:   true,
 						EnumField:   pb.Enum_VAL_2,
 					},
-					&pb.SimpleMessage{
+					{
 						StringField: "qux",
 						Int32Field:  22,
 						BoolField:   false,
@@ -146,6 +148,29 @@ var (
 		},
 	}
 )
+
+func TestAgainstRealDatabase(t *testing.T) {
+	db, stopMongo := startMongoDatabase(t)
+	defer stopMongo()
+	coll := db.Collection("test_collection")
+	if _, err := coll.InsertOne(context.Background(), simpleMessage); err != nil {
+		t.Errorf("coll.InsertOne error = %v", err)
+	}
+	count, err := coll.CountDocuments(context.Background(), bson.D{})
+	if err != nil {
+		t.Errorf("coll.CountDocuments error = %v", err)
+	}
+	if count != 1 {
+		t.Errorf("coll.CountDocuments got = %v; want = 1", count)
+	}
+	var found *pb.SimpleMessage
+	if err := coll.FindOne(context.Background(), bson.D{}).Decode(&found); err != nil {
+		t.Errorf("Decode() = %v, want nil")
+	}
+	if !proto.Equal(simpleMessage, found) {
+		t.Errorf("proto.Equal(%v, %v) = false, want true")
+	}
+}
 
 func TestMarshalUnmarshal(t *testing.T) {
 	rb := bson.NewRegistryBuilder()
@@ -193,17 +218,11 @@ func TestMarshalUnmarshalWithPointers(t *testing.T) {
 	}
 }
 
-func TestWithDatabase(t *testing.T) {
-	_, stopMongo := startServer(t)
-	defer stopMongo()
-}
-
-func startServer(t *testing.T) (*mongo.Database, func()) {
+func startMongoDatabase(t *testing.T) (*mongo.Database, func()) {
 	mongod := &mongodb.Mongod{}
 	if err := mongod.Start(); err != nil {
 		t.Fatal(err)
 	}
-
 	m, err := mongod.GetClient()
 	if err != nil {
 		t.Fatal(err)
