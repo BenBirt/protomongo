@@ -15,6 +15,3 @@ jobs:
           key: ${{ runner.os }}-${{ env.cache-name }}
       - uses: actions/checkout@v2
       - run: bazel test //...
-    # runs-on: gcr.io/bazel-public/bazel:7.3.2
-    # steps:
-    #   - run: test ...
