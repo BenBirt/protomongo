@@ -48,7 +48,7 @@ func (m *Mongod) Start() error {
 	}
 	m.port = port
 	m.cmd = exec.Command(
-		"external/mongodb/bin/mongod",
+		"external/mongodb/bin/mongo",
 		"--port", strconv.Itoa(m.port),
 		"--dbpath", dbDir,
 	)
