@@ -4,7 +4,7 @@ jobs:
   run-bazel-test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: bazel test //...
     # runs-on: gcr.io/bazel-public/bazel:7.3.2
     # steps:
     #   - run: test ...
